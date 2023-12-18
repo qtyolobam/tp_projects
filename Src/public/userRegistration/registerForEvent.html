@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Registration</title>
+  <script defer src="registerForEvent.js"></script>
+  <link rel="stylesheet" href="./registerForEvent.css">
+</head>
+<body>
+
+  <form id="eventForm">
+    <label for="events">Select an Event:</label>
+    <div id="elems">
+    <select id="events" name="events">
+      <option value="E1">Event 1</option>
+      <option value="E2">Event 2</option>
+      <option value="E3">Event 3</option>
+      <option value="E4">Event 4</option>
+      <option value="E5">Event 5</option>
+      <option value="E6">Event 6</option>
+      <option value="E7">Event 7</option>
+      <option value="E8">Event 8</option>
+    </select>
+</div>
+    <br>
+    <button type="button" onclick="registerForEvent()">Submit</button>
+  </form>
+
+</body>
+</html>

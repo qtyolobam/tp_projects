@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;1,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap');
+@font-face {
+    font-family: 'fairy';
+    src: url('../fonts/FairyDustB.ttf')
+   
+}
+
+/* Navbar */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} 
+
+body {
+    font-family: "Poppins",sans-serif;
+}
+
+.logo {
+    width: 100px;
+}
+
+.header {
+    z-index: 9999;
+    padding: 0.9rem 0;
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+
+
+header nav {
+    position: relative;
+    width: 1700px;
+    margin : 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header ul {
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+header ul a {
+    text-decoration: none;
+    color: white;
+    padding: 0 2rem;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+main {
+    background-color: black;
+    height:100%;
+    width: 100%;
+}
+
+#page1{
+    height: 100%;
+    position: relative;
+    top:0;   
+}
+
+#page1>h3{
+    font-family: "fairy";
+    font-size: 19vh;
+    font-weight: 100;
+    z-index: 1;
+    color: white;
+    top:10%;
+    left:39%;
+    letter-spacing: 10px;
+    position: absolute;
+}
+
+#page1>p{
+    font-family: 'Noto Serif', serif;
+    z-index: 4;
+    font-size: 7vh;
+    font-weight: 300;
+    color: white;
+    position: absolute;
+    top:19%;
+    left:33%;
+    
+}
+
+#bg-img{
+    z-index: 1;
+    transform: translate3d(0,var(--scrollTop),0);
+}
+
+
+#mid-img{
+    z-index: 2;
+    position: absolute; 
+    top:0;
+    right:3px;   
+}
+#f-img{
+    z-index: 3; 
+    min-height: auto;
+    position: absolute; 
+    top:0;
+    right:0;
+    min-height: fit-content;
+}
+
+
+#page2{
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    z-index: 0;
+}
+
+#Sec-img{
+    z-index: 4;
+    position: absolute;
+    min-height: fit-content;
+    top: 73vh;
+    background-repeat: no-repeat;
+}
+
+
+
+/* footer */
+
+.footer {
+    width: 100%;
+    height: 15vh;
+    padding: 2rem;
+    text-align: center;
+    background-color: #00000d;
+    color: white;
+    position: absolute;
+    z-index: 10000; /* Set a value higher than the z-index of other elements */
+    bottom:0;
+    left:0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.socials {
+    display: flex;
+    gap: 20px; /* Adjust the space between links as needed */
+}
+
+.footerLogo img {
+    width: 50px; /* Adjust the width as needed */
+}
+
+
+a.social {
+    background-color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    margin: 0 10px;
+    border: #fff solid 2px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a.social::before {
+    content: '';
+    background-color: #f0f;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 100%;
+    transition: 0.5s all ease-in-out;
+}
+
+a.social:hover::before {
+    top: 0;
+}
+
+a.social.Facebook::before {
+    background-color: #3a5796;
+}
+
+a.social.X::before {
+    background-color: #1c9ceb;
+}
+
+a.social.Linkedin::before {
+    background-color: #0371ae;
+}
+
+a.social.Instagram::before {
+    background-color: #d12c7a;
+}
+
+a.social.Youtube::before {
+    background-color: #d12c7a;
+}
+
+
+a.social svg {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    z-index: 1;
+    transition: 0.5s all ease-in-out;
+}
+
+a.social:hover svg {
+    transform: rotate(360deg);
+}
+
+a.social svg path {
+    fill: #383838;
+    transition: 0.5s all ease-in-out;
+}
+
+a.social:hover svg path {
+    fill: #fff;
+}

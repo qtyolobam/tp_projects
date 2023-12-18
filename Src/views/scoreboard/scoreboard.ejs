@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoreboard</title>
+</head>
+<body>
+
+  <h2>Scoreboard</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Participant ID</th>
+        <th>Points</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (let i = 0; i < scores.length; i++) { %>
+        <tr>
+          <td><%= i + 1 %></td>
+          <td><%= scores[i]._id %></td>
+          <td><%= scores[i].points %></td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+</body>
+</html>

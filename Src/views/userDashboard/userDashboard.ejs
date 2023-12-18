@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/userDashboard/userDashboardStyle.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="/userDashboard/userDashboard.js"></script>
+    <title>User Dashboard</title>
+</head>
+<body>
+    <header class="header">
+        <center><h1 id="headH1">User Dashboard</h1></center>
+    </header>
+    <main class="dashboard">
+        <div class="user-info">
+            <h2>Welcome, <%= participant._id %>!</h2>
+            <div class="points">
+                Current Points: <span><%= participant.points %></span>
+            </div>
+        </div>
+        <section class="events">
+            <h2>Your Registered Events:</h2>
+            <ul>
+                <% participant.eventsRegistered.forEach(function(event) { %>
+                    <li class="eventsListItem"><%= event %></li><hr>
+                <% }); %>
+            </ul>
+        </section>
+        <a href="/userRegistration/registerForEvent.html" id="reg">Register for events </a><br><br>
+        
+        <button onclick="logout()">Logout</button>
+    </main>
+</body>
+</html>

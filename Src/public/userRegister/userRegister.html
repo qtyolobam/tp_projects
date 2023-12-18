@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./userRegister.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form id="registrationForm" autocomplete="off" >
+                    <h2>Register</h2>
+                    <div class="inputbox">
+                        <ion-icon name="person-circle-outline"></ion-icon>
+                        <input type="text" name="" id='firstName' required placeholder=" " >
+                        <label for="">First Name</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="person-circle-outline"></ion-icon>
+                        <input type="text" name="" id='lastName' required  placeholder=" ">
+                        <label for="">Last Name</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <input type="email" name="" id='email' required placeholder=" ">
+                        <label for="">Email</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input type="password" name="" id='password' required placeholder=" ">
+                        <label for="">Password</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="call-outline"></ion-icon>
+                        <input type="tel" name="" id='phoneNumber' required placeholder=" " >
+                        <label for="">Phone Number</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="id-card-outline"></ion-icon>
+                        <input type="text" name="" id='idProof' required placeholder=" ">
+                        <label for="">ID Proof</label>
+                    </div>
+                    <div id="err"></div>
+                    <button type="submit"> Register </button>                    
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+    
+          const loginForm = document.getElementById("registrationForm");
+          
+          loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            let data={};
+            requiredFields = ['firstName', 'lastName', 'email', 'password', 'phoneNumber', 'idProof'];
+            for (const field of requiredFields) {
+              const inputField = document.getElementById(field);
+              if (inputField) {
+                data[field] = inputField.value;
+              }
+            }
+            try {
+              const response = await fetch('/user/register', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              });
+    
+              if (response.ok) {
+                const data = await response.json();
+                alert(data.data.message);
+                window.location.href = data.data.redirect;
+              } else {
+                const errorData = await response.json();
+                document.getElementById('err').innerText=errorData.message;
+              }
+            } catch (error) {
+                document.getElementById('err').innerText = error.message;
+            }
+          }
+          );
+        });
+    
+      </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+@font-face {
+    font-family: 'Saol-M';
+    src: url('../userDashboard/fonts/SaolDisplay-MediumItalic.otf');
+}
+
+@font-face {
+    font-family: 'Saol-R';
+    src: url('../userDashboard/fonts/SaolDisplay-Regular.otf');
+}
+
+@font-face {
+    font-family: 'Saol-RI';
+    src: url('../userDashboard/fonts/SaolDisplay-RegularItalic.otf');
+}
+
+@font-face {
+    font-family: 'FgB';
+    src: url('../userDashboard/fonts/FoundersGrotesk-Bold.otf');
+}
+
+@font-face {
+    font-family: 'FgR';
+    src: url('../userDashboard/fonts/FoundersGrotesk-Regular.otf');
+}
+
+@font-face {
+    font-family: 'Tg';
+    src: url('../userDashboard/fonts/TrioGrotesk-Medium.otf');
+}
+
+
+
+
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+.euphoria-alert {
+    background-color: #66cdaa;
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+  }
+
+  
+body{
+    color: #f5f5dc;
+    background-color: #576739;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+label{
+    font-family: 'Saol-RI';
+    font-size: 10vw;
+
+}
+
+#events{
+    background-color:#f5f5dc;
+    color: #576739;
+    height: 8vh;
+    width: 20vw;
+    position: absolute;
+    left: 40%;
+    top: 40%;
+    font-family: 'Tg';
+    font-size: 1.5vw;
+    text-align: center;
+    
+}
+
+button{
+    background-color:#f5f5dc;
+    color: #576739;
+    height: 4vh;
+    width: 5.5vw;
+    position: relative;
+    top: 50vh;
+    left:45%;
+    font-size: larger;
+}
+
+button:hover{
+    color: #000000;
+    background-color: #9fc754;
+}
+

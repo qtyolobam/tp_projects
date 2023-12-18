@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/adminDashboard/adminDashboard.css">
+  <title>Admin Dashboard</title>
+  <style>
+    /* Add your CSS styling here */
+  </style>
+</head>
+<body>
+  <div id="console-wrapper">
+    <div id="console">
+      <!-- Console section to display API responses -->
+    </div>
+  </div>
+
+  <div id="getAllParticipants">
+    <h2>Get All Participants</h2>
+    <button onclick="getAllParticipants()">Get Participants</button>
+  </div>
+
+  <div id="addParticipant">
+    <h2>Add Participant</h2>
+    <form id="participantForm" onsubmit="addParticipant(event)">
+        <label>
+            Participant Type:
+            <select id="participantType" onchange="toggleParticipantForm()">
+                <option value="cc" selected>CC Participant</option>
+                <option value="ncp">NCP Participant</option>
+            </select>
+        </label>
+        <!-- Fields for CC Participant -->
+        <div id="ccForm">
+            <label>Name: <input type="text" id="ccName" required></label>
+            <label>Password: <input type="password" id="ccPassword" required></label>
+            <label>Email: <input type="email" id="ccEmail" required></label>
+            <label>ID: <input type="text" id="ccId" required></label>
+        </div>
+        <!-- Fields for NCP Participant -->
+        <div id="ncpForm" style="display: none;">
+            <label>First Name: <input type="text" id="ncpFirstName"></label>
+            <label>Last Name: <input type="text" id="ncpLastName"></label>
+            <label>Email: <input type="email" id="ncpEmail"></label>
+            <label>Password: <input type="password" id="ncpPassword"></label>
+            <label>Phone Number: <input type="text" id="ncpPhoneNumber"></label>
+            <label>ID Proof: <input type="text" id="ncpIdProof"></label>
+        </div>
+        <button type="submit">Add Participant</button>
+    </form>
+  </div>
+
+  <div id="viewEventRegistrations">
+    <h2>View Event Registrations</h2>
+    <form id="viewEventRegistrationsForm" onsubmit="viewEventRegistrations(event)">
+      <label>ID: <input type="text" id="viewId" required></label>
+      <button type="submit">View Registrations</button>
+    </form>
+  </div>
+
+  <div id="confirmEventParticipant">
+    <h2>Confirm Event Participant</h2>
+    <form id="confirmEventParticipantForm" onsubmit="confirmEventParticipant(event)">
+      <label>Participant ID: <input type="text" id="confirmParticipantId" required></label>
+      <label>Event ID: <input type="text" id="confirmEventID" required></label>
+      <button type="submit">Confirm Participant</button>
+    </form>
+  </div>
+
+  <div id="addEventToDB">
+    <h2>Add Event to Database</h2>
+    <form id="addEventToDBForm" onsubmit="addEventToDB(event)">
+      <label>Event Name: <input type="text" id="eventName" required></label>
+      <label>Event ID: <input type="text" id="eventID" required></label>
+      <label>Event Slots: <input type="text" id="eventSlots" required></label>
+      <label>Duration: <input type="text" id="duration" required></label>
+      <button type="submit">Add Event</button>
+    </form>
+  </div>
+
+  <div id="rewardPoints">
+    <h2>Reward Points</h2>
+    <form id="rewardPointsForm" onsubmit="rewardPoints(event)">
+        <label>Participant ID: <input type="text" id="rewardParticipantId" required></label>
+        <label>Event ID: <input type="text" id="rewardEventID" required></label>
+        <label>Points:
+            <select id="points" onchange="toggleCustomPoints()">
+                <option value="firstPodium">First Podium</option>
+                <option value="secondPodium">Second Podium</option>
+                <option value="thirdPodium">Third Podium</option>
+                <option value="custom">Custom</option>
+            </select>
+        </label>
+        <input type="number" id="customPoints" placeholder="Enter custom points" style="display: none;">
+        <button type="submit">Reward Points</button>
+    </form>
+
+    <script>
+        function toggleCustomPoints() {
+            const customPointsInput = document.getElementById('customPoints');
+            const selectedOption = document.getElementById('points').value;
+
+            // Toggle the display of the customPoints input based on the selected option
+            customPointsInput.style.display = selectedOption === 'custom' ? 'block' : 'none';
+        }
+    </script>
+  </div>  <br><br>
+  <button onclick="logout()">Logout</button>
+
+  <script>
+
+
+function logout() {
+        const url = '/user/logout'; 
+
+        // Fetch to destroy the session
+        fetch(url, {
+            method: 'GET', 
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+            if (responseData.status === 'success') {
+                
+                window.location.href = '/adminLogin/adminLogin.html';
+            } else {
+                alert('Logout failed:', responseData.error);
+            }
+            })
+            .catch((error) => {
+                    alert('Error during logout:', error);
+            });
+        }
+
+function printToConsole(text) {
+        const consoleDiv = document.getElementById('console');
+        consoleDiv.innerHTML += text;
+}
+
+function clearConsole(){
+  const consoleDiv = document.getElementById('console');
+  consoleDiv.innerHTML="";
+}
+
+function getAllParticipants() {
+  const url = '/admin/participant';
+
+  fetch(url, {
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === 'success' && data.data) {
+        const { ncpParticipantList, ccParticipantList } = data.data;
+
+        // Format CC Participants
+        const ccFormatted = formatParticipants(ccParticipantList, 'CC Participants');
+
+        // Format NCP Participants
+        const ncpFormatted = formatParticipants(ncpParticipantList, 'NCP Participants');
+
+        // Combine CC and NCP data
+        const combinedFormattedData = `${ccFormatted}\n\n${ncpFormatted}`;
+
+        // Download the formatted data as a text file
+        downloadTextFile(combinedFormattedData, 'participants_data.txt');
+      } else{
+              Object.entries(responseData).forEach(([key, value]) => {
+                printToConsole(`${key}: ${value}<br>`);
+              });
+       }
+    })
+    .catch((error) => {
+      printToConsole(`Error fetching participants: ${error}`);
+    });
+}
+
+function formatParticipants(participantList, title) {
+  let formattedString = `${title}:\n`;
+  participantList.forEach((participant) => {
+    Object.entries(participant).forEach(([key, value]) => {
+      formattedString += `${key}: ${value}\n`;
+    });
+    formattedString += '\n'; // Leave a line after each participant
+  });
+  return formattedString;
+}
+
+function downloadTextFile(data, filename) {
+  const blob = new Blob([data], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.href = window.URL.createObjectURL(blob);
+  link.download = filename;
+
+  // Append the link to the document and trigger a click to start the download
+  document.body.appendChild(link);
+  link.click();
+
+  // Remove the link from the document after the download
+  document.body.removeChild(link);
+}
+
+function toggleParticipantForm() {
+        const participantType = document.getElementById('participantType').value;
+        const ccForm = document.getElementById('ccForm');
+        const ncpForm = document.getElementById('ncpForm');
+
+        // Make all fields not required initially
+        document.getElementById('ccName').required = false;
+        document.getElementById('ccPassword').required = false;
+        document.getElementById('ccEmail').required = false;
+        document.getElementById('ccId').required = false;
+
+        document.getElementById('ncpFirstName').required = false;
+        document.getElementById('ncpLastName').required = false;
+        document.getElementById('ncpEmail').required = false;
+        document.getElementById('ncpPassword').required = false;
+        document.getElementById('ncpPhoneNumber').required = false;
+        document.getElementById('ncpIdProof').required = false;
+
+        if (participantType === 'cc') {
+            ccForm.style.display = 'block';
+            ncpForm.style.display = 'none';
+            // Make CC fields required
+            document.getElementById('ccName').required = true;
+            document.getElementById('ccPassword').required = true;
+            document.getElementById('ccEmail').required = true;
+            document.getElementById('ccId').required = true;
+        } else if (participantType === 'ncp') {
+            ccForm.style.display = 'none';
+            ncpForm.style.display = 'block';
+            // Make NCP fields required
+            document.getElementById('ncpFirstName').required = true;
+            document.getElementById('ncpLastName').required = true;
+            document.getElementById('ncpEmail').required = true;
+            document.getElementById('ncpPassword').required = true;
+            document.getElementById('ncpPhoneNumber').required = true;
+            document.getElementById('ncpIdProof').required = true;
+        }
+    }
+
+ function addParticipant(event) {
+      event.preventDefault();
+      clearConsole();
+      const participantType = document.getElementById('participantType').value;
+      const url = '/admin/participant';
+
+      // Fields based on participant type
+      let requiredFields = [];
+      let data = {};
+      
+      if (participantType === 'cc') {
+        requiredFields = ['ccName', 'ccPassword', 'ccEmail', 'ccId'];
+      } else if (participantType === 'ncp') {
+        requiredFields = ['ncpFirstName', 'ncpLastName', 'ncpEmail', 'ncpPassword', 'ncpPhoneNumber', 'ncpIdProof'];
+      }
+
+      // Construct the request body based on the required fields
+      for (const field of requiredFields) {
+        const inputField = document.getElementById(field);
+        if (inputField) {
+          const fieldName = field.replace(participantType, '');
+          const lowercasedFieldName = fieldName.charAt(0).toLowerCase() + fieldName.slice(1);
+          data[lowercasedFieldName] = inputField.value;
+        }
+      }
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((responseData) => {
+          if (responseData.status === 'success' && responseData.data) {
+            const participant = responseData.data.participant;
+
+            // Print Participant Details
+            printToConsole('Participant Added Successfully:<br>');
+            Object.entries(participant).forEach(([key, value]) => {
+              printToConsole(`${key}: ${value}<br>`);
+            });
+          } else{
+              Object.entries(responseData).forEach(([key, value]) => {
+                printToConsole(`${key}: ${value}<br>`);
+              });
+            }
+        })
+        .catch((error) => {
+          printToConsole(`Error adding participant: ${error}`);
+        });
+  }
+
+  function viewEventRegistrations(event) {
+      event.preventDefault();
+      clearConsole();
+      const url = '/admin/viewParticipantEvents';
+      const formData = new FormData(document.getElementById('viewEventRegistrationsForm'));
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({ id : document.getElementById('viewId').value}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json())
+        .then(responseData => {
+          if(responseData.status === 'success' && responseData.data){
+
+            printToConsole('Events fetched successfully:<br>');
+            Object.entries(responseData.data).forEach(([key, value]) => {
+              printToConsole(`${key}: ${value}<br>`);
+            });
+
+          }else{
+              Object.entries(responseData).forEach(([key, value]) => {
+                printToConsole(`${key}: ${value}<br>`);
+              });
+            }
+        })
+        .catch(error => printToConsole(`Error viewing event registrations: ${error}`));
+  }
+
+  function rewardPoints(event) {
+    event.preventDefault();
+    clearConsole();
+
+    const participantId = document.getElementById('rewardParticipantId').value;
+    const eventID = document.getElementById('rewardEventID').value;
+    const pointsSelect = document.getElementById('points');
+    const customPointsInput = document.getElementById('customPoints');
+
+    let pointsValue;
+
+    if (pointsSelect.value === 'custom') {
+        // If "Custom" is selected, use the customPointsInput value
+        pointsValue = {
+            type: 'arb',
+            value: parseFloat(customPointsInput.value) || 0, // Use parseFloat to convert the value to a number
+        };
+    } else {
+        // If one of the predefined options is selected, use the corresponding values
+        const predefinedPoints = {
+            firstPodium: { type: 'firstPodium', value: 30 },
+            secondPodium: { type: 'secondPodium', value: 20 },
+            thirdPodium: { type: 'thirdPodium', value: 10 },
+        };
+
+        pointsValue = predefinedPoints[pointsSelect.value];
+    }
+
+    const url = '/admin/participant/givePoints';
+
+      let data={};
+      data["participantId"]=participantId;
+      data["eventID"]=eventID;
+      data["points"]=pointsValue;
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json())
+        .then(responseData => {
+          if(responseData.status === 'success' && responseData.data){
+
+            printToConsole('Points alloted successfully:<br>');
+            Object.entries(responseData.data).forEach(([key, value]) => {
+              printToConsole(`${key}: ${value}<br>`);
+            });
+
+            }else{
+              Object.entries(responseData).forEach(([key, value]) => {
+                printToConsole(`${key}: ${value}<br>`);
+              });
+            }
+        })
+        .catch(error => printToConsole(`Error rewarding points: ${error}`));
+}
+
+
+  function confirmEventParticipant(event) {
+      event.preventDefault();
+      clearConsole();
+      const url = '/admin/confirmParticipant';
+      const formData = new FormData(document.getElementById('confirmEventParticipantForm'));
+
+
+      requiredFields = ['confirmParticipantId','confirmEventID'];
+
+      data={};
+      for (const field of requiredFields) {
+        const inputField = document.getElementById(field);
+        if (inputField) {
+          const fieldName = field.replace("confirm", '');
+          const lowercasedFieldName = fieldName.charAt(0).toLowerCase() + fieldName.slice(1);
+          data[lowercasedFieldName] = inputField.value;
+        }
+      }
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json())
+        .then(responseData => {
+            if(responseData.status === 'success' && responseData.data){
+
+              printToConsole('Confirmed participant successfully:<br>');
+              Object.entries(responseData.data.participant).forEach(([key, value]) => {
+                printToConsole(`${key}: ${value}<br>`);
+              });
+
+            }else{
+              Object.entries(responseData).forEach(([key, value]) => {
+                printToConsole(`${key}: ${value}<br>`);
+              });
+            }
+        })
+        .catch(error => printToConsole(`Error confirming event participant: ${JSON.stringify(error)}`));
+  }
+
+  function addEventToDB(event) {
+      event.preventDefault();
+      clearConsole();
+      const url = '/admin/events';
+
+      let data={};
+      requiredFields = ['eventName','eventID','eventSlots','duration'];
+      for (const field of requiredFields) {
+        const inputField = document.getElementById(field);
+        if (inputField) {
+          data[field] = inputField.value;
+        }
+      }
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json())
+        .then(responseData => {
+          if(responseData.status === 'success' && responseData.data){
+
+            printToConsole('Event created successfully:<br>');
+            Object.entries(responseData.data.event).forEach(([key, value]) => {
+              printToConsole(`${key}: ${value}<br>`);
+            });
+
+          }else{
+              Object.entries(responseData).forEach(([key, value]) => {
+                printToConsole(`${key}: ${value}<br>`);
+              });
+            }
+        })
+        .catch(error => printToConsole(`Error adding event to DB: ${error}`));
+  }
+
+
+   </script>
+</body>
+</html>
+ 

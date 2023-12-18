@@ -1,0 +1,168 @@
+*{
+    padding: 0;
+    margin: 3;
+    cursor: default;
+}
+
+@font-face {
+    font-family: 'Saol-M';
+    src: url('./fonts/SaolDisplay-MediumItalic.otf');
+}
+
+@font-face {
+    font-family: 'Saol-R';
+    src: url('./fonts/SaolDisplay-Regular.otf');
+}
+
+@font-face {
+    font-family: 'Saol-RI';
+    src: url('./fonts/SaolDisplay-RegularItalic.otf');
+}
+
+@font-face {
+    font-family: 'FgB';
+    src: url('./fonts/FoundersGrotesk-Bold.otf');
+}
+
+@font-face {
+    font-family: 'FgR';
+    src: url('./fonts/FoundersGrotesk-Regular.otf');
+}
+
+@font-face {
+    font-family: 'Tg';
+    src: url('./fonts/TrioGrotesk-Medium.otf');
+}
+
+
+body{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #576739;
+    color: #f5f5dc;
+   
+    font-weight: 100;
+    
+}
+
+.header{
+    
+   position: absolute;
+   top: 9%;
+   left: 31%;  
+   font-size: 3vw;
+   /* font-family: 'Saol-RI'; */
+   font-family: 'Saol-RI';
+   
+   
+    
+}
+
+.points{
+    position: relative;
+    bottom: 4vh;   
+    text-align: center; 
+}
+
+.dashboard{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #f5f5dc;
+    border-radius: 15px;
+    min-height: 50vh;
+    width: 50vw;
+    flex-direction: column;
+    margin-top: 30vh;
+
+}
+
+
+.user-info{
+    font-family: 'FgR';
+    position: relative;
+    bottom: 30%;
+    font-size: 30px;
+    letter-spacing: 2px;
+}
+
+.events{
+    font-family: 'FgR';
+    
+    position: relative;
+    bottom: 6.5vh;
+}
+
+.events ul{
+    border: solid 2px #f5f5dc;
+    border-radius: 10px;
+    height: 100%;
+    list-style: none;
+    min-width: 100%;
+
+}
+
+hr{
+    
+    height: 1px;
+    background-color: #f5f5dc;
+}
+
+.events ul li{
+    text-align: center;
+    border-radius: 10px;
+    width: 100%;
+    font-size: larger;
+    padding-top: 3px;
+    cursor:none;
+    
+}
+
+.events ul li:hover{
+    background-color: #627441;
+}
+
+
+
+
+
+#reg{
+    font-family: 'Tg';
+    color: #f5f5dc;
+    text-decoration: none;
+    font-size: 30px;
+    letter-spacing: -2px;
+    position: relative;
+    top: 15vh;
+   
+    padding-bottom: 30px;
+    
+    
+
+
+}
+
+#reg:hover{
+    text-shadow: 2px 0px 13px rgba(0,0,0,0.54);
+}
+
+button{
+    color: #576739;
+    background-color: #f5f5dc;
+    cursor: pointer;
+    width: 11vh;
+    height: 4vh;
+    position: absolute;
+    top: 4%;
+    left: 3%;
+    
+}
+
+button:hover{
+    color: #f5f5dc;
+    background-color: #91ab61;
+}
+
+
